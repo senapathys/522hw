@@ -2,42 +2,62 @@ import numpy as np
 
 
 class LinearRegression:
+    """
+    Class for linear regression model
+    """
+
     w: np.ndarray
     b: float
 
     def __init__(self):
-        self.weights = None
-        self.bias = 0
+        self.w = np.ndarray([])
+        self.b = 0
 
-    def fit(self, X: np.ndarray, y: np.ndarray):
+    def fit(self, X: np.ndarray, y: np.ndarray) -> None:
+        """
+        Fit linear regression to input data
+        """
         X = np.hstack((np.ones((X.shape[0], 1)), X))
         weights = np.linalg.inv(X.T @ X) @ X.T @ y
-        self.weights = weights[1:]
-        self.bias = weights[0]
+        self.w = weights[1:]
+        self.b = weights[0]
 
     def predict(self, X: np.ndarray) -> np.ndarray:
-        return X @ self.weights + self.bias
+        """
+        Predict output for input X
+        """
+        return X @ self.w + self.b
 
 
 class GradientDescentLinearRegression(LinearRegression):
     """
-    A linear regression model that uses gradient descent to fit the model.
+    Class for linear regression model using gradient descent
     """
 
-    def fit(self, X: np.ndarray, y: np.ndarray, lr: float = 0.01, epochs: int = 1000):
-        X = np.hstack((np.ones((X.shape[0], 1)), X))
+    def fit(
+        self, X: np.ndarray, y: np.ndarray, lr: float = 0.01, epochs: int = 1000
+    ) -> None:
+        """
+        Fit linear regression to input data
+        """
+        num_samples, num_features = X.shape
 
-        self.weights = np.zeros(X.shape[1]-1)
-        self.bias = 0
+        X = np.hstack((np.ones((X.shape[0], 1)), X))
+        self.w = np.zeros(num_features + 1)
+        self.b = 0
 
         for _ in range(epochs):
-            print(self.weights)
-            print(self.bias)
-            y_pred = X @ np.hstack((self.bias, self.weights))
-            residuals = y_pred - y
-            gradient = X.T @ residuals
-            self.bias -= lr * gradient[0]
-            self.weights -= lr * gradient[1:]
+            y_pred = X @ self.w + self.b
+            residuals = y - y_pred
+            grad_w = -(2 / num_samples) * X.T @ residuals
+            grad_b = -(2 / num_samples) * np.sum(residuals)
+            self.b -= lr * grad_b
+            self.w -= lr * grad_w
 
     def predict(self, X: np.ndarray) -> np.ndarray:
-        return X @ self.weights + self.bias
+        """
+        Predict output for input X
+        """
+        if X.shape[1] < self.w.shape[0]:
+            X = np.hstack((np.ones((X.shape[0], 1)), X))
+        return X @ self.w + self.b
