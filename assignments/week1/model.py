@@ -24,7 +24,7 @@ class LinearRegression:
 
     def predict(self, X: np.ndarray) -> np.ndarray:
         """
-        Predict output for input X
+        Predict output for input data
         """
         return X @ self.w + self.b
 
@@ -56,7 +56,7 @@ class GradientDescentLinearRegression(LinearRegression):
 
     def predict(self, X: np.ndarray) -> np.ndarray:
         """
-        Predict output for input X
+        Predict output for input data
         """
         if X.shape[1] < self.w.shape[0]:
             X = np.hstack((np.ones((X.shape[0], 1)), X))
