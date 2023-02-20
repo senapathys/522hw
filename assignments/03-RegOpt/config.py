@@ -2,19 +2,13 @@ from typing import Callable
 import torch
 import torch.optim
 import torch.nn as nn
-from torchvision.transforms import (
-    Compose,
-    Normalize,
-    ToTensor,
-    RandomHorizontalFlip,
-    RandomCrop,
-)
+from torchvision.transforms import Compose, Normalize, ToTensor, RandomHorizontalFlip
 
 
 class CONFIG:
     batch_size = 256
     num_epochs = 10
-    initial_learning_rate = 0.002
+    initial_learning_rate = 0.001
     initial_weight_decay = 0
 
     lrs_kwargs = {
@@ -32,9 +26,8 @@ class CONFIG:
 
     transforms = Compose(
         [
-            RandomCrop(32, padding=4),
-            RandomHorizontalFlip(),
             ToTensor(),
-            Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+            Normalize(mean=0.5, std=0.5),
+            RandomHorizontalFlip(p=0.5),
         ]
     )
