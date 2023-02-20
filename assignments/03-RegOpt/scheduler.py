@@ -33,6 +33,9 @@ class CustomLRScheduler(_LRScheduler):
         super(CustomLRScheduler, self).__init__(optimizer, last_epoch)
 
     def get_lr(self) -> List[float]:
+        """
+        gets learning rate
+        """
         cycle = self.last_epoch // (2 * self.step_size)
         x = abs(self.last_epoch / self.step_size - 2 * cycle + 1)
         if self.mode == "triangular":
