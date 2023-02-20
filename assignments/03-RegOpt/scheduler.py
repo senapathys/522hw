@@ -6,6 +6,7 @@ class CustomLRScheduler(_LRScheduler):
     """
     Custom LR scheduler
     """
+
     def __init__(
         self,
         optimizer,
