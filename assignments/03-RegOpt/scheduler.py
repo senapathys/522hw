@@ -9,7 +9,7 @@ class CustomLRScheduler(_LRScheduler):
         base_lr=0.001,
         max_lr=0.003,
         step_size=2000,
-        mode="triangular",
+        mode="triangular2",
         gamma=1.0,
         last_epoch=-1,
     ):
